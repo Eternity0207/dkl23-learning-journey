@@ -2,7 +2,10 @@
 using namespace std;
 
 #define fastio ios::sync_with_stdio(false); cin.tie(nullptr);
+#define all(x) (x).begin(), (x).end()
+#define pb push_back
 #define int long long
+#define rep(i,a,b) for(int i = (a); i < (b); i++)
 
 int mod = 1000000007;
 
@@ -23,33 +26,47 @@ int modinv(int a) {
 int32_t main() {
     fastio;
 
-    int secret = 1234;
+    int secret = 2324124;
     int n = 5, t = 3;
 
     vector<int> coeff(t);
     coeff[0] = secret;
-    for(int i = 1; i < t; i++) coeff[i] = rand() % 1000;
+    rep(i,1,t) coeff[i] = rand() % 1000;
+
+    cout << "Polynomial: ";
+    rep(i,0,t) {
+        cout << coeff[i] << "*x^" << i;
+        if(i != t-1) cout << " + ";
+    }
+    cout << endl;
 
     vector<pair<int,int>> shares;
 
-    for(int i = 1; i <= n; i++) {
+    rep(i,1,n+1) {
         int x = i, y = 0, cur = 1;
-        for(int j = 0; j < t; j++) {
+        rep(j,0,t) {
             y = (y + coeff[j] * cur) % mod;
             cur = (cur * x) % mod;
         }
-        shares.push_back({x, y});
+        shares.pb({x,y});
+    }
+
+    cout << "Shares:" << endl;
+    for(auto &p : shares) {
+        cout << "(" << p.first << ", " << p.second << ")" << endl;
     }
 
     int recovered = 0;
 
-    for(int i = 0; i < t; i++) {
+    cout << endl << "Reconstruction steps:" << endl;
+
+    rep(i,0,t) {
         int xi = shares[i].first;
         int yi = shares[i].second;
 
         int num = 1, den = 1;
 
-        for(int j = 0; j < t; j++) {
+        rep(j,0,t) {
             if(i == j) continue;
             int xj = shares[j].first;
             num = (num * (-xj + mod)) % mod;
@@ -57,9 +74,15 @@ int32_t main() {
         }
 
         int li = (num * modinv(den)) % mod;
+
+        cout << "Using share (" << xi << ", " << yi << ")" << endl;
+        cout << "Lagrange coeff: " << li << endl;
+        cout << "Contribution: " << (yi * li) % mod << endl;
+
         recovered = (recovered + yi * li) % mod;
     }
 
+    cout << endl;
     cout << "Original: " << secret << endl;
     cout << "Recovered: " << recovered << endl;
 
