@@ -18,3 +18,13 @@ This improves security because no single party controls the full private key.
 - [ ] Read DKLs23 paper
 - [ ] Implement Shamir Secret Sharing
 - [ ] Explore Rust for MPC frameworks
+
+
+## Implementation
+
+### Shamir Secret Sharing
+Implemented a basic t-of-n secret sharing scheme.
+
+- Secret is split into multiple shares
+- Minimum threshold required to reconstruct
+- Used polynomial interpolation (Lagrange)
