@@ -1,0 +1,12 @@
+[package]
+name = "ec_encrypt_scheme"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+generic-ec = { version = "0.5", features = ["curve-ed25519", "curve-secp256k1"] }
+rand = "0.8"
+sha2 = "0.10"
+
+[dev-dependencies]
+hex = "0.4"
